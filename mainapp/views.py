@@ -8,5 +8,16 @@ def index(request):
 def products(request):
     return render(request, 'products.html')
 
+def test(request):
+    context = {
+        'title': 'geekshop',
+        'header': 'Добро пожаловать на сайт',
+        'user': 'Dmitry Bykov',
+        'products':[
+
+        ]
+
+    }
+    return render(request, 'test_content.html', context)
 
 
