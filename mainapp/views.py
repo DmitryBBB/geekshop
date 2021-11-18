@@ -14,6 +14,10 @@ def test(request):
         'header': 'Добро пожаловать на сайт',
         'user': 'Dmitry Bykov',
         'products':[
+            {'name': 'shorts', 'price':'2000rub'},
+            {'name': 'boots', 'price': '2300rub'},
+            {'name': 'headers', 'price': '7300rub'},
+
 
         ]
 
