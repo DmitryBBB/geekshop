@@ -4,6 +4,7 @@ from django.db import models
 
 
 class ProductCategory(models.Model):
+    objects = None
     name = models.CharField(max_length=64)
     description = models.TextField(blank=True, null=True)
 
@@ -11,6 +12,7 @@ class ProductCategory(models.Model):
         return f'{self.name}'
 
 class Products(models.Model):
+    objects = None
     name = models.CharField(max_length=128)
     image = models.ImageField(upload_to='product_image',blank=True)
     description = models.TextField(blank=True, null=True)
