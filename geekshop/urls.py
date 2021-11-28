@@ -19,11 +19,12 @@ from mainapp.views import index
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index,name='index'),
-    path('products/', include('mainapp.urls',namespace='mainapp'))
-    #path('products/', products,name='products'),
+    path('products/', include('mainapp.urls',namespace='mainapp')),
+    path('users/', include('authapp.urls', namespace='authapp')),
 
 ]
 
