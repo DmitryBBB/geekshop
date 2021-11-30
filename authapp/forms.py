@@ -1,4 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.exceptions import ValidationError
+
 from authapp.models import User
 
 
@@ -13,6 +15,12 @@ class UserLoginForm(AuthenticationForm):
         self.fields['password'].widget.attrs['placeholder'] = 'Введите пароль'
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
+
+    def clean_username(self):
+        data = self.cleaned_data['username']
+        if not data.isalpha():
+            raise ValidationError('Name user is not number')
+        return data
 
 class UserRegisterForm(UserCreationForm):
     class Meta:
