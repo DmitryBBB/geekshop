@@ -48,4 +48,4 @@ def register(request):
 
 def logout(request):
     auth.logout(request)
-    return render(request, 'mainapp/index.html')
+    return render(request, 'authapp/login.html')
