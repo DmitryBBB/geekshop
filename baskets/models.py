@@ -6,6 +6,7 @@ from mainapp.models import Products
 
 
 class Basket(models.Model):
+    objects = None
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     product = models.ForeignKey(Products,on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
@@ -15,3 +16,14 @@ class Basket(models.Model):
 
     def __str__(self):
         return f'Корзина для {self.user.name} | Продукт {self.product.name}'
+
+    def sum(self):
+        return self.quantity * self.product.price
+
+    def total_sum(self):
+        baskets = Basket.objects.filter(user=self.user)
+        return sum(basket.sum() for basket in baskets)
+
+    def total_quantity(self):
+        baskets = Basket.objects.filter(user=self.user)
+        return sum(basket.quantity for basket in baskets)
