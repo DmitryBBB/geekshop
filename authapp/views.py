@@ -1,4 +1,5 @@
 from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -46,13 +47,15 @@ def register(request):
     }
     return render(request, 'authapp/register.html', context)
 
+@login_required
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(instance=request.user,data=request.POST, files=request.FILES)
-        if form.is_valid():
+        if form.is_valid:
             form.save()
+            messages.success(request, 'Сохранено')
         else:
-            print(form.errors)
+            print(messages.error)
     context = {
         'title':'Geekshop | Профайл',
         'form': UserProfileForm(instance=request.user),
