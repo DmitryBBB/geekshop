@@ -55,7 +55,8 @@ def profile(request):
             form.save()
             messages.success(request, 'Сохранено')
         else:
-            print(messages.error)
+            messages.error(request,form.errors)
+
     context = {
         'title':'Geekshop | Профайл',
         'form': UserProfileForm(instance=request.user),
