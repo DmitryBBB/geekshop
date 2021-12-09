@@ -1,6 +1,8 @@
 import json
 import os
 
+from django.views.generic import DetailView
+
 from mainapp.models import Products, ProductCategory
 
 MODULE_DIR = os.path.dirname(__file__)
@@ -28,6 +30,19 @@ def products(request):
     context['categories'] = ProductCategory.objects.all()
     return render(request, 'mainapp/products.html', context)
 
+
+
+class ProductDetail(DetailView):
+
+    model = Products
+    template_name = 'mainapp/detail.html'
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetail, self).get_context_data(**kwargs)
+        product = self.get_object()
+        context['products'] = product
+        return context
 
 
 
