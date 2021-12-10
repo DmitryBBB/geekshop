@@ -1,5 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+
+# Create your views here.
 from django.urls import reverse
 
 from admins.forms import UserAdminRegisterForm
@@ -29,10 +31,10 @@ def admin_users_create(request):
     else:
         form = UserAdminRegisterForm()
     context = {
-        'title': 'GeekShop - Admin | Registration',
+        'title': 'Geekshop - Админ | Регистрация',
         'form': form
     }
-    return render(request, 'admins/admin-users-create.html',context)
+    return render(request,'admins/admin-users-create.html',context)
 
 
 def admin_users_update(request):
