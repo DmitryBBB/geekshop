@@ -1,3 +1,5 @@
+
+
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -5,11 +7,13 @@ from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse
 
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryUpdateFormAdmin
 from authapp.models import User
 
 
 # Create your views here.
+from mainapp.models import Products, ProductCategory
+
 
 @user_passes_test(lambda u: u.is_superuser)
 def index(request):
@@ -65,3 +69,34 @@ def admin_users_delete(request,pk):
         user.is_active=False
         user.save()
     return HttpResponseRedirect(reverse('admins:admin_users'))
+
+def admin_category(request):
+    context = {
+        "categories": ProductCategory.objects.all()
+    }
+    return render(request, 'admins/admin-category-read.html', context)
+
+
+def admin_category_create(request):
+    if request.method == 'POST':
+        form = CategoryUpdateFormAdmin(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:admin_category_read'))
+    else:
+        form = CategoryUpdateFormAdmin()
+    context = {
+        'title': 'Geekshop - Админ | Правка',
+        'form': form
+    }
+    return render(request,'admins/admin_category_create.html',context)
+
+
+def admin_product(request):
+    context = {
+        "products": Products.objects.all()
+    }
+    return render(request, 'admins/admin-product-read.html', context)
+
+
+

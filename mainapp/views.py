@@ -1,4 +1,4 @@
-import json
+
 import os
 
 from django.views.generic import DetailView
@@ -19,14 +19,18 @@ def index(request):
     return render(request, 'mainapp/index.html',context)
 
 
-def products(request):
-    file_path = os.path.join(MODULE_DIR, 'fixtures/goods.json')
+def products(request, id_category=None):
+
     context = {
         'title': 'Geekshop - Покупки',
 
     }
-   # context['products'] = json.load(open(file_path, encoding='utf-8'))
-    context['products'] = Products.objects.all()
+
+    if id_category:
+        context['products'] = Products.objects.filter(category_id=id_category)
+    else:
+        context['products'] = Products.objects.all()
+
     context['categories'] = ProductCategory.objects.all()
     return render(request, 'mainapp/products.html', context)
 
