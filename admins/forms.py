@@ -35,6 +35,7 @@ class UserAdminProfileForm(UserProfileForm):
 
 
 class CategoryUpdateFormAdmin(forms.ModelForm):
+    objects = None
     name = forms.CharField(widget=forms.TextInput())
     description = forms.CharField(widget=forms.TextInput(), required=False)
 
