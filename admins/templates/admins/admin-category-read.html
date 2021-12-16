@@ -34,7 +34,7 @@
                                 </tfoot>
                                 <tbody>
 
-                                {% for category in categories %}
+                                {% for category in object_list %}
                                     <tr>
                                         <td>{{ category.name }}</td>
                                         <td>{{ category.description }}</td>
@@ -47,13 +47,14 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <form action="" method="post">
+                                            <form action="{% url 'admins:admin_category_delete' category.id %}"
+                                                  method="post">
                                                 {% csrf_token %}
                                                 <input class="btn btn-danger btn-block" type="submit" value="Удалить">
                                             </form>
                                         </td>
                                         <td>
-                                            <a href="">
+                                            <a href="{% url 'admins:admin_category_update' category.id %}">
                                                 <input class="btn btn-success btn-block" type="submit" value="Изменить">
                                             </a>
                                         </td>
