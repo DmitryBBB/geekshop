@@ -22,8 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-rsci*4egns^c8+qs4dlx6j1jflr5&pnmj-7$d(c-ct&l6ytig!'
-from dotenv import load_dotenv
-load_dotenv(BASE_DIR / '.env')
+import dotenv
+dotenv.load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -153,4 +153,4 @@ EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = 'tmp/emails/'
 
-EMAIL_HOST_USER,EMAIL_HOST_PASSWORD = None,None
+# EMAIL_HOST_USER,EMAIL_HOST_PASSWORD = None,None
