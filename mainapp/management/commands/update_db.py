@@ -1,8 +1,5 @@
-
-
 from django.core.management.base import BaseCommand
-from authapp.models import User,UserProfile
-
+from authapp.models import User, UserProfile
 
 
 class Command(BaseCommand):
