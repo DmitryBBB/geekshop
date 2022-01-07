@@ -5,7 +5,7 @@
         <main>
             <div class="container-fluid">
                 <h1 class="mt-4">Создание продукта</h1>
-                <form action="{% url 'admins:admin_product_create' %}" method="post">
+                <form action="{% url 'admins:admin_products_create' %}" method="post">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col-lg-6">

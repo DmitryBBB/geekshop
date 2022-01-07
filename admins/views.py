@@ -1,76 +1,50 @@
-from django.contrib.auth.decorators import user_passes_test
+
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+
 
 # Create your views here.
-from django.urls import  reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, UpdateView, DeleteView, CreateView, DetailView, TemplateView
 
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryUpdateFormAdmin, ProductsUpdateFormAdmin
-
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryUpdateFormAdmin, ProductsForm
 from authapp.models import User
-
-# Create your views here.
+from mainapp.mixin import BaseClassContextMixin, CustomDispatchMixin
 from mainapp.models import Products, ProductCategory
 
-# Админка
-@user_passes_test(lambda u: u.is_superuser)
-def index(request):
-    return render(request, 'admins/admin.html')
+
+class IndexTemplateView(TemplateView):
+    template_name = 'admins/admin.html'
 
 
-class UserListView(ListView):
+# Users
+class UserListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
     model = User
     template_name = 'admins/admin-users-read.html'
+    title = 'Админка | Пользователи'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(UserListView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Пользователи'
-        return context
 
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(UserListView, self).dispatch(request, *args, **kwargs)
-
-# Админка Users
-class UserCreateView(CreateView):
+class UserCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
     model = User
     template_name = 'admins/admin-users-create.html'
     form_class = UserAdminRegisterForm
     success_url = reverse_lazy('admins:admin_users')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(UserCreateView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Создать пользователя'
-        return context
-
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(UserCreateView, self).dispatch(request, *args, **kwargs)
+    title = 'Админка | Создать пользователя'
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     model = User
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admin_users')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(UserUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Обновить пользователя'
-        return context
-
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(UserUpdateView, self).dispatch(request, *args, **kwargs)
+    title = 'Админка | Обновить пользователя'
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
     model = User
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admin_users')
+    title = 'Админка | Удалить пользователя'
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -78,114 +52,85 @@ class UserDeleteView(DeleteView):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(UserDeleteView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Удалить пользователя'
-        return context
 
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(UserDeleteView, self).dispatch(request, *args, **kwargs)
-
-# Админка Category
-
-
-class CategoryListView(ListView):
+# Category
+class CategoryListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
     model = ProductCategory
     template_name = 'admins/admin-category-read.html'
+    title = 'Админка | Список категорий'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CategoryListView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Категории'
-        return context
-
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(CategoryListView, self).dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        if self.kwargs:
+            return ProductCategory.objects.filter(id=self.kwargs.get('pk'))
+        else:
+            return ProductCategory.objects.all()
 
 
-class CategoryCreateView(CreateView):
-    model = ProductCategory
-    template_name = 'admins/admin-category-create.html'
-    form_class = CategoryUpdateFormAdmin
-    success_url = reverse_lazy('admins:admin_category_create')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CategoryCreateView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Создание Категории'
-        return context
-
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(CategoryCreateView, self).dispatch(request, *args, **kwargs)
-
-
-
-class CategoryUpdateView(UpdateView):
-    model = ProductCategory
-    template_name = 'admins/admin-category-update-delete.html'
-    form_class = CategoryUpdateFormAdmin
-    success_url = reverse_lazy('admins:admin_category')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CategoryUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Редактировать пользователя'
-        return context
-
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(CategoryUpdateView, self).dispatch(request, *args, **kwargs)
-
-
-class CategoryDeleteView(UpdateView):
+class CategoryDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
     model = ProductCategory
     template_name = 'admins/admin-category-update-delete.html'
     success_url = reverse_lazy('admins:admin_category')
 
-    def delete(self, request, *args):
+    def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.is_active = False
+        self.object.is_active = False if self.object.is_active else True
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(CategoryDeleteView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Удаление категории'
-        return context
 
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(CategoryDeleteView, self).dispatch(request, *args, **kwargs)
-# Админка Products
+class CategoryUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-category-update-delete.html'
+    form_class = CategoryUpdateFormAdmin
+    title = 'Админка | Обновления категории'
+    success_url = reverse_lazy('admins:admin_category')
 
 
+class CategoryCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-category-create.html'
+    success_url = reverse_lazy('admins:admin_category')
+    form_class = CategoryUpdateFormAdmin
+    title = 'Админка | Создание категории'
 
-class ProductListView(ListView):
+
+# Product
+class ProductListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
     model = Products
     template_name = 'admins/admin-product-read.html'
+    title = 'Админка | Список Продуктов'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ProductListView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Товар'
-        return context
-
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(ProductListView, self).dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        if self.kwargs:
+            return Products.objects.filter(id=self.kwargs.get('pk'))
+        else:
+            return Products.objects.all()
 
 
 
-class ProductCreateView(CreateView):
+class ProductsUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     model = Products
-    template_name = 'admins/admin-product-create.html'
-    form_class = ProductsUpdateFormAdmin
-    success_url = reverse_lazy('admins:admin_product')
+    template_name = 'admins/admin-products-update-delete.html'
+    form_class = ProductsForm
+    title = 'Админка | Обновление продукта'
+    success_url = reverse_lazy('admins:admins_product')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ProductCreateView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка | Создание Товара'
-        return context
 
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(ProductCreateView, self).dispatch(request, *args, **kwargs)
+class ProductsCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
+    model = Products
+    template_name = 'admins/admin-products-create.html'
+    form_class = ProductsForm
+    title = 'Админка | Создание продукта'
+    success_url = reverse_lazy('admins:admins_product')
+
+
+class ProductsDeleteView(DeleteView, CustomDispatchMixin):
+    model = Products
+    template_name = 'admins/admin-product-read.html'
+    success_url = reverse_lazy('admins:admins_product')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False if self.object.is_active else True
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
