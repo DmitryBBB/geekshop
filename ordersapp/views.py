@@ -53,6 +53,8 @@ class OrderCreate(CreateView, BaseClassContextMixin):
         orderitems = context['orderitems']
 
         with transaction.atomic():
+            form.instance.user = self.request.user
+            self.object = form.save()
             if orderitems.is_valid():
                 orderitems.instance = self.object
                 orderitems.save()

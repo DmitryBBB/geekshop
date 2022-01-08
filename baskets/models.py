@@ -27,3 +27,18 @@ class Basket(models.Model):
     def total_quantity(self):
         baskets = Basket.objects.filter(user=self.user)
         return sum(basket.quantity for basket in baskets)
+
+    def delete(self, using=None, keep_parents=False,*args,**kwargs):
+        super(Basket,self).delete(*args,**kwargs)
+        self.product.quantity += self.quantity
+        self.save()
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk:
+            self.product.quantity -= self.quantity - self.get_item(int(self.pk))
+
+
+    @staticmethod
+    def get_item(pk):
+        return Basket.objects.get(pk=pk).quantity
