@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from baskets.models import Basket
 from mainapp.models import Products
 
+
 # @login_required
 # def basket_add(request,id):
 #     if request.is_ajax():
@@ -26,19 +27,17 @@ from mainapp.models import Products
 #         return JsonResponse({'result': result})
 
 @login_required
-def basket_add(request,id):
+def basket_add(request, id):
     user_select = request.user
     product = Products.objects.get(id=id)
-    baskets = Basket.objects.filter(user=user_select,product=product)
+    baskets = Basket.objects.filter(user=user_select, product=product)
     if baskets:
         basket = baskets.first()
-        basket.quantity +=1
+        basket.quantity += 1
         basket.save()
     else:
-        Basket.objects.create(user=user_select,product=product,quantity=1)
+        Basket.objects.create(user=user_select, product=product, quantity=1)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
 
 
 @login_required
@@ -58,6 +57,6 @@ def basket_edit(request, id_basket, quantity):
             basket.delete()
 
         baskets = Basket.objects.filter(user=request.user)
-        context = {'baskets':baskets}
-        result = render_to_string('baskets/basket.html',context)
-        return JsonResponse({'result':result})
+        context = {'baskets': baskets}
+        result = render_to_string('baskets/basket.html', context)
+        return JsonResponse({'result': result})

@@ -1,5 +1,6 @@
 from baskets.models import Basket
 
+
 def basket(request):
     print(f'Работа контекстного процессора корзины')
     baskets_list = []
