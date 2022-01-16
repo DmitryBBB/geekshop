@@ -1,4 +1,4 @@
-from django.conf import settings
+from geekshop import settings
 from django.contrib import auth, messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
