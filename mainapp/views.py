@@ -1,4 +1,3 @@
-
 import os
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -8,20 +7,18 @@ from mainapp.models import Products, ProductCategory
 
 MODULE_DIR = os.path.dirname(__file__)
 
-
-
 from django.shortcuts import render
+
 
 # Create your views here.
 def index(request):
     context = {
-        'title':'Geekshop',
+        'title': 'Geekshop',
     }
-    return render(request, 'mainapp/index.html',context)
+    return render(request, 'mainapp/index.html', context)
 
 
 def products(request, id_category=None, page=1):
-
     context = {
         'title': 'Geekshop - Покупки',
 
@@ -32,7 +29,7 @@ def products(request, id_category=None, page=1):
     else:
         products = Products.objects.all()
 
-    paginator = Paginator(products,per_page=3)
+    paginator = Paginator(products, per_page=3)
 
     try:
         products_paginator = paginator.page(page)
@@ -46,18 +43,12 @@ def products(request, id_category=None, page=1):
     return render(request, 'mainapp/products.html', context)
 
 
-
 class ProductDetail(DetailView):
-
     model = Products
     template_name = 'mainapp/detail.html'
-
 
     def get_context_data(self, **kwargs):
         context = super(ProductDetail, self).get_context_data(**kwargs)
         product = self.get_object()
         context['products'] = product
         return context
-
-
-
