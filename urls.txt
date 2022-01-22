@@ -1,4 +1,12 @@
 http://194.67.92.53/
+http://194.67.92.53/users/profile/
+http://194.67.92.53/orders/
+http://194.67.92.53/orders/create/
+http://194.67.92.53/admins/
+http://194.67.92.53/admins/users/
+http://194.67.92.53/admins/category/
+http://194.67.92.53/admins/product/
+http://194.67.92.53/admins/category/create/
 http://194.67.92.53/products/
 http://194.67.92.53/products/category/1
 http://194.67.92.53/products/category/3
