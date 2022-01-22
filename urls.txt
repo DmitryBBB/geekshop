@@ -1,0 +1,15 @@
+http://194.67.92.53/
+http://194.67.92.53/products/
+http://194.67.92.53/products/category/1
+http://194.67.92.53/products/category/3
+http://194.67.92.53/products/category/4
+http://194.67.92.53/products/category/8
+http://194.67.92.53/products/category/9
+http://194.67.92.53/users/login/
+http://194.67.92.53/users/register/
+http://194.67.92.53/products/detail/5/
+http://194.67.92.53/products/detail/6/
+http://194.67.92.53/products/detail/1/
+http://194.67.92.53/products/detail/4/
+http://194.67.92.53/products/detail/3/
+http://194.67.92.53/products/detail/2/
