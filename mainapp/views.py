@@ -47,8 +47,8 @@ class ProductDetail(DetailView):
     model = Products
     template_name = 'mainapp/detail.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(ProductDetail, self).get_context_data(**kwargs)
-    #     product = self.get_object()
-    #     context['products'] = product
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetail, self).get_context_data(**kwargs)
+        product = self.get_object()
+        context['products'] = product
+        return context

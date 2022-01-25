@@ -9,5 +9,5 @@ def basket(request):
         baskets_list = Basket.objects.filter(user=request.user)
 
     return {
-        'basket': baskets_list,
+        'basket': baskets_list
     }
