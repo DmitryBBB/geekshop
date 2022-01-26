@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from authapp.models import User
 from mainapp.models import Products
+from django.utils.functional import cached_property
 
 
 # class BasketQuerySet(models.QuerySet):
@@ -22,6 +23,7 @@ class Basket(models.Model):
     create_timestamp = models.DateTimeField(auto_now_add=True)
     update_timestamp = models.DateTimeField(auto_now=True)
 
+    @cached_property
     def get_items_cached(self):
         return self.user.basket.select_related()
     def __str__(self):
