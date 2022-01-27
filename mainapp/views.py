@@ -1,6 +1,7 @@
 import os
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView
 
 from mainapp.models import Products, ProductCategory
@@ -11,6 +12,7 @@ from django.core.cache import cache
 MODULE_DIR = os.path.dirname(__file__)
 
 from django.shortcuts import render
+
 
 def get_link_category():
     if settings.LOW_CACHE:
@@ -33,7 +35,7 @@ def get_link_product():
             cache.set(key,link_product)
         return link_product
     else:
-        return Products.objects.all()
+        return Products.objects.all().select_related('category')
 
 
 def get_product(pk):
@@ -54,6 +56,8 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
+# @cache_page(3600)
+# @never_cache
 def products(request, id_category=None, page=1):
     context = {
         'title': 'Geekshop - Покупки',
