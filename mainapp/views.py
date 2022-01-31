@@ -94,5 +94,4 @@ class ProductDetail(DetailView):
         context = super(ProductDetail, self).get_context_data(**kwargs)
         context['products'] = get_product(self.kwargs.get('pk'))
 
-
         return context

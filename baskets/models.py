@@ -23,12 +23,13 @@ class Basket(models.Model):
     create_timestamp = models.DateTimeField(auto_now_add=True)
     update_timestamp = models.DateTimeField(auto_now=True)
 
+
+    def __str__(self):
+        return f'Корзина для {self.user.name} | Продукт {self.product.name}'
+
     @cached_property
     def get_items_cached(self):
         return self.user.basket.select_related()
-    def __str__(self):
-        return f'Корзина для {self.user.username} | Продукт {self.product.name}'
-
     def sum(self):
         return self.quantity * self.product.price
 
