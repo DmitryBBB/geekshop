@@ -11,7 +11,7 @@ from django.views.generic import ListView, CreateView, DetailView, DeleteView, U
 
 from baskets.models import Basket
 from mainapp.mixin import BaseClassContextMixin
-from mainapp.models import Products
+from mainapp.models import Product
 from ordersapp.forms import OrderForm, OrderItemsForm
 from ordersapp.models import Order, OrderItem
 
@@ -37,7 +37,7 @@ class OrderCreate(CreateView, BaseClassContextMixin):
         if self.request.POST:
             formset = OrderFormSet(self.request.POST)
         else:
-            basket_item = Basket.objects.filter(user=self.request.user)
+            basket_item = Basket.objects.filter(user=self.request.user).select_related()
             if basket_item:
                 OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemsForm, extra=basket_item.count())
                 formset = OrderFormSet()
@@ -113,19 +113,19 @@ class OrderDetail(DetailView, BaseClassContextMixin):
     title = 'GeekShop | Просмотр заказа'
 
 
-def get_product_price(request, pk):
-    if request.is_ajax():
-        product = Products.objects.get(pk=pk)
-        if product:
-            return JsonResponse({'price': product.price})
-        return JsonResponse({'price': 0})
-
-
 def order_forming_complete(request, pk):
     order = get_object_or_404(Order, pk=pk)
     order.status = Order.SEND_TO_PROCEED
     order.save()
     return HttpResponseRedirect(reverse('orders:list'))
+
+def get_product_price(request,pk):
+    if request.is_ajax():
+        product = Product.objects.get(pk=pk)
+        if product:
+            return JsonResponse({'price':product.price})
+        return JsonResponse({'price':0})
+
 
 
 @receiver(pre_save, sender=Basket)
@@ -144,17 +144,3 @@ def product_quantity_update_save(sender, instance, **kwargs):
 def product_quantity_update_delete(sender, instance, **kwargs):
     instance.product.quantity += instance.quantity
     instance.product.save()
-
-# def delete(self, *args, **kwargs):
-#
-#
-#     super(Basket, self).delete(*args, **kwargs)
-#
-# def save(self, *args, **kwargs):
-#     if self.pk:
-#         get_item = self.get_item(int(self.pk))
-#         self.product.quantity -= self.quantity - get_item
-#     else:
-#         self.product.quantity -= self.quantity
-#     self.product.save()
-#     super(Basket, self).save(*args, **kwargs)

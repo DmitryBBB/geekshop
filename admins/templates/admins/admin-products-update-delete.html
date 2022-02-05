@@ -24,15 +24,15 @@
                             </div>
                         </div>
                         <div class="form-row mb-2">
-                            <div class="col-lg-12">
-                                <div class="custom-file">
-                                    {{ form.image }}
-                                    <label class="custom-file-label" for="{{ form.image.id_for_label }}">Выберите
-                                        изображение</label>
-                                </div>
+                        <div class="col-lg-12">
+                            <div class="custom-file">
+                                {{ form.image }}
+                                <label class="custom-file-label" for="{{ form.image.id_for_label }}">Выберите
+                                    изображение</label>
                             </div>
                         </div>
-                        <div class="form-row">
+                    </div>
+                      <div class="form-row">
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="small mb-1" for="{{ form.price.id_for_label }}">Цена</label>
@@ -53,8 +53,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <img width="430" height="100" style="margin-top: 28px"
-                                     src="{% if product.image %} {{ product.image.url }} {% else %}{% static 'vendor/img/products/product_default.png' %}{% endif %}"
-                                     class="img-thumbnail">
+                                     src="{% if product.image %} {{ product.image.url }} {% else %}{% static 'vendor/img/products/product_default.png' %}{% endif %}" class="img-thumbnail">
                             </div>
                         </div>
                         <div class="form-row">
@@ -62,7 +61,7 @@
                                 <input class="btn float-lg-right btn-info btn-block btn-lg" type="submit"
                                        value="Сохранить">
                                 <input type="button" class="btn float-lg-right btn-danger btn-block btn-lg"
-                                       onclick="window.location.href = '{% url 'admins:admins_product' %}'"
+                                       onclick="window.location.href = '{% url 'admins:admins_product' %}';"
                                        value="Отмена"/>
                             </div>
                         </div>

@@ -1,27 +1,27 @@
+from django.conf import settings
 from django.db import models
 
 # Create your models here.
-from django.conf import settings
-from mainapp.models import Products
+from mainapp.models import Product
 
 
 class Order(models.Model):
     FORMING = 'FM'
-    SEND_TO_PROCEED = "STP"
+    SEND_TO_PROCEED = 'STP'
     PAID = 'PD'
     PROCEEDED = 'PRD'
     READY = 'RDY'
     CANCEL = 'CNC'
 
     ORDER_STATUS_CHOICES = (
-        (FORMING, 'Формируется'),
-        (SEND_TO_PROCEED, 'Отправлен в обработку'),
-        (PAID, 'Оплачено'),
-        (PROCEEDED, 'Обрабатывается'),
-        (READY, 'Готов к выдаче'),
-        (CANCEL, 'Отмена заказа'),
-
+        (FORMING, 'формируется'),
+        (SEND_TO_PROCEED, 'отправлен в обработку'),
+        (PAID, 'оплачено'),
+        (PROCEEDED, 'обрабатывается'),
+        (READY, 'готов к выдачи'),
+        (CANCEL, 'отмена заказа'),
     )
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='обновлен', auto_now=True)
@@ -49,10 +49,17 @@ class Order(models.Model):
         self.is_active = False
         self.save()
 
+    def get_summary(self):
+        items = self.orderitems.select_related()
+        return {
+            'get_total_cost': sum(list(map(lambda x: x.get_product_cost(), items))),
+            'get_total_quantity': sum(list(map(lambda x: x.quantity, items)))
+        }
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, verbose_name='заказ', related_name='orderitems', on_delete=models.CASCADE)
-    product = models.ForeignKey(Products, verbose_name='продукты', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name='продукты', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
 
     def get_product_cost(self):

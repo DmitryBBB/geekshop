@@ -1,4 +1,5 @@
 {% extends 'admins/base.html' %}
+
 {% block content %}
 
     <div id="layoutSidenav_content">
@@ -44,12 +45,10 @@
                                 {{ form.email }}
                             </div>
                             <div class="col-lg-2">
-                                <label class="small mb-1" for="{{ form.age.id_for_label }}">Адрес электронной
-                                    почты</label>
+                                <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст</label>
                                 {{ form.age }}
                             </div>
                         </div>
-
                         <div class="form-row">
                             <div class="col-lg-12" style="margin-top: 33px;">
                                 <input class="btn btn-info btn-block" type="submit" value="Сохранить">

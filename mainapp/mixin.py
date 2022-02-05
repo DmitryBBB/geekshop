@@ -18,8 +18,8 @@ class BaseClassContextMixin(ContextMixin):
         context['title'] = self.title
         return context
 
-
 class UserDispatchMixin(View):
+
     @method_decorator(user_passes_test(lambda u: u.is_authenticated))
     def dispatch(self, request, *args, **kwargs):
         return super(UserDispatchMixin,self).dispatch(request, *args, **kwargs)

@@ -18,14 +18,14 @@
             <div class="col-lg-9">
                 <div class="row my-5">
                     <div class="card" style="width: 20rem;">
-                        <img src="/media/{{ products.image }}" class="card-img-top" alt="...">
+                        <img src="/media/{{ product.image }}" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">{{ products.name }}</h5>
-                            <p class="card-text">{{ products.description }}</p>
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">{{ products.price }} руб</li>
-                            <li class="list-group-item">В наличии: {{ products.quantity }}</li>
+                            <li class="list-group-item">{{ product.price }} руб</li>
+                            <li class="list-group-item">В наличии: {{ product.quantity }}</li>
                         </ul>
                     </div>
                 </div>

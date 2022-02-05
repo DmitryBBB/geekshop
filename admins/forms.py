@@ -1,8 +1,8 @@
 from django import forms
 
-from authapp.forms import UserRegisterForm, UserProfileForm
+from authapp.forms import UserRegisterForm, UserProfilerForm
 from authapp.models import User
-from mainapp.models import ProductCategory, Products
+from mainapp.models import ProductCategory, Product
 
 
 class UserAdminRegisterForm(UserRegisterForm):
@@ -20,7 +20,7 @@ class UserAdminRegisterForm(UserRegisterForm):
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 
 
-class UserAdminProfileForm(UserProfileForm):
+class UserAdminProfileForm(UserProfilerForm):
     email = forms.EmailField(widget=forms.EmailInput())
     username = forms.CharField(widget=forms.TextInput())
 
@@ -33,11 +33,11 @@ class UserAdminProfileForm(UserProfileForm):
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 
-
 class CategoryUpdateFormAdmin(forms.ModelForm):
     # name = forms.CharField(widget=forms.TextInput())
     # description = forms.CharField(widget=forms.TextInput(), required=False)
     # # is_active = forms.BooleanField(widget=forms.CheckboxInput())
+
 
     class Meta:
         model = ProductCategory
@@ -48,13 +48,12 @@ class CategoryUpdateFormAdmin(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
 
-
 class ProductsForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=ProductCategory.objects.all())
     image = forms.ImageField(widget=forms.FileInput)
 
     class Meta:
-        model = Products
+        model = Product
         fields = ['name', 'description', 'price', 'quantity', 'category', 'image']
 
     def __init__(self, *args, **kwargs):
@@ -66,14 +65,13 @@ class ProductsForm(forms.ModelForm):
                 field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 
-
 class ProductUpdate(ProductsForm):
     category = forms.ModelChoiceField(queryset=ProductCategory.objects.all().select_related(),
                                       empty_label=None)
     image = forms.ImageField(widget=forms.FileInput, required=False)
 
     class Meta:
-        model = Products
+        model = Product
         fields = ['name', 'description', 'price', 'quantity', 'category', 'image']
 
     def __init__(self, *args, **kwargs):
